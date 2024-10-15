@@ -6,3 +6,27 @@ cd bookscraper/bookscraper/spiders
 
 scrapy genspider bookspider (site link that need to scrape) #creating new project
 
+
+pip install ipython (for scrapy shell)
+
+scrapy shell
+
+fetch ("site link")
+
+response (for checking the site status)
+
+response.css(article.product_pod") 
+
+response.css(article.product_pod").get()
+
+books=response.css(article.product_pod")
+
+len(books)
+
+book=books[0]
+
+book.css("h3 a::text").get()
+
+
+
+
