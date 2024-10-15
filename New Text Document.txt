@@ -2,3 +2,7 @@ creating folder
 py -m venv venv
 pip install scrapy in virtual environment
 scrapy startproect (projetname)
+cd bookscraper/bookscraper/spiders
+
+scrapy genspider bookspider (site link that need to scrape) #creating new project
+
