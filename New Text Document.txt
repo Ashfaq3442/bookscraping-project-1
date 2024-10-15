@@ -1,0 +1,4 @@
+creating folder
+py -m venv venv
+pip install scrapy in virtual environment
+scrapy startproect (projetname)
