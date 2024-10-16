@@ -27,6 +27,8 @@ book=books[0]
 
 book.css("h3 a::text").get()
 
+book.css("div.product_price p::text").get()
+
 
 
 
