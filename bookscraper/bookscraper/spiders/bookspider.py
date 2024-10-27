@@ -10,11 +10,12 @@ class BookspiderSpider(scrapy.Spider):
         books=response.css('article.product_pod')
 
         for book in books:
-            yield{
-                'name': book.css('h3 a::text').get(),
-                'price': book.css('div.product_price p::text').get(),
-                'url': book.css('h3 a').attrib['href'],
-            }
+            relative_url=book.css("h3 a::attr(href)").get()
+            if "catalogue/" in relative_url:
+                book_url="https://books.toscrape.com/"+relative_url
+            else:
+                book_url="https://books.toscrape.com/catalogue/"+relative_url
+            yield response.follow(book_url, callback=self.parse_book_page)
 
         next_page=response.css("li.next a::attr(href)").get()
 
@@ -25,5 +26,16 @@ class BookspiderSpider(scrapy.Spider):
                 next_page_url="https://books.toscrape.com/catalogue/"+next_page
             yield response.follow(next_page_url, callback=self.parse)
 
-    
-        
+    def parse_book_page(self,response):
+        book_detail=response.css(".page_inner")
+        yield {
+            "Book Title": response.css("div.product_main h1::text").get(),
+            "price": response.css("article.product_page p::text").get(),
+            "Book Type": response.css("li a::text").getall()[2],
+            "Rating":response.css("article.product_page p.star-rating::attr(class)").re_first(r"star-rating (\w+)"),
+            "UPC":response.css("table.table-striped td::text").get(),
+            "Product Type":response.css("table.table-striped td::text").getall()[1],
+            "Tax":response.css("table.table-striped td::text").getall()[4],
+            "Number Of Reviews":response.css("table.table-striped td::text").getall()[6],
+            "Description":response.css(".product_page p::text").getall()[10],
+        }
